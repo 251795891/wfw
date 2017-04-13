@@ -1,0 +1,17 @@
+group 'wfw'
+version '1.0'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile ('com.alibaba:dubbo:2.5.3')
+    compile ('log4j:log4j:1.2.16')
+    compile ('com.github.sgroschupf:zkclient:0.1')
+}
