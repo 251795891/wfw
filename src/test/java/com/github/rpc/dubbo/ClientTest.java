@@ -11,7 +11,7 @@ public class ClientTest {
         PropertyConfigurator.configure(dir);
         ClassPathXmlApplicationContext ct = new ClassPathXmlApplicationContext("config/spring-dubbo-client.xml");
         HelloService helloService= (HelloService) ct.getBean("helloService");
-        String result = helloService.hello("wtd--------");
+        String result = helloService.hello("wtd--------123");
         System.out.println(result);
     }
 }
