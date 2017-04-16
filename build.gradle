@@ -9,6 +9,38 @@ repositories {
     mavenCentral()
 }
 
+task generateJar(type: Jar,dependsOn:[jar]) {
+    into('') {
+        from "$buildDir/classes/main"
+        //include('sample/')
+    }
+    /*
+    into('') {
+        from "$projectDir/src/main/resources"
+    }*/
+}
+task copyJar(type:Copy) {
+    from 'build/libs'
+    into 'build/'+version+'/dist' // 目标位置
+}
+task copyDependsJars(type:Copy) {
+    from configurations.runtime
+    into 'build/'+version+'/dist' // 目标位置
+}
+
+
+task copyResources(type:Copy) {
+    from 'src/main/resources/config'
+    into 'build/'+version+'/config' // 目标位置
+}
+task copyBin(type:Copy, dependsOn: [generateJar,copyJar,copyDependsJars,copyResources]) {
+    from 'src/main/resources/bin'
+    into 'build/'+version // 目标位置
+}
+
+
+
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     compile ('com.alibaba:dubbo:2.5.3')

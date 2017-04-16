@@ -27,7 +27,7 @@
     <!--使用zookeeper注册中心暴露服务地址 -->
     <dubbo:registry address="zookeeper://114.215.28.8:2181"></dubbo:registry>
     <!-- 用dubbo协议在20880端口暴露服务 -->
-    <dubbo:protocol name="dubbo" port="20880" />
+    <dubbo:protocol name="dubbo" host="www.dubbo.server" port="20880" />
     <!--要暴露的服务接口 -->
     <dubbo:service interface="com.github.rpc.dubbo.services.HelloService" ref="helloService"/>
 
