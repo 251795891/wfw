@@ -5,45 +5,56 @@ apply plugin: 'java'
 
 sourceCompatibility = 1.7
 
+tasks.withType(JavaCompile){
+    options.encoding = "UTF-8"
+}
+
 repositories {
+    flatDir {
+        // 先看下build.gradle文件所在目录下的 libs目录中有没有
+        dirs 'libs'
+    }
+    maven {
+        //如果目录中木有，则找url对应的maven仓库，下面是阿里的maven仓库，速度杠杆的。
+        url "http://maven.aliyun.com/nexus/content/groups/public/"
+    }
     mavenCentral()
 }
 
-task generateJar(type: Jar,dependsOn:[jar]) {
-    into('') {
-        from "$buildDir/classes/main"
-        //include('sample/')
-    }
-    /*
-    into('') {
-        from "$projectDir/src/main/resources"
-    }*/
-}
-task copyJar(type:Copy) {
+task copyJar(type: Copy) {
     from 'build/libs'
-    into 'build/'+version+'/dist' // 目标位置
+    into 'build/' + version + '/dist' // 目标位置
 }
-task copyDependsJars(type:Copy) {
+task copyDependsJars(type: Copy) {
     from configurations.runtime
-    into 'build/'+version+'/dist' // 目标位置
+    into 'build/' + version + '/dist' // 目标位置
 }
 
-
-task copyResources(type:Copy) {
+task copyResources(type: Copy) {
     from 'src/main/resources/config'
-    into 'build/'+version+'/config' // 目标位置
+    into 'build/' + version + '/config' // 目标位置
 }
-task copyBin(type:Copy, dependsOn: [generateJar,copyJar,copyDependsJars,copyResources]) {
+task copyBin(type: Copy, dependsOn: [copyDependsJars,copyJar , copyResources]) {
     from 'src/main/resources/bin'
-    into 'build/'+version // 目标位置
+    into 'build/' + version // 目标位置
+}
+
+task afterBuild(dependsOn: [build]) {
+
 }
 
 
+task runSimple( dependsOn: 'classes', type: JavaExec) {
+    main = 'com.github.rpc.dubbo.services.server.ClientTest'
+    classpath=sourceSets.main.runtimeClasspath
+    classpath+=sourceSets.test.runtimeClasspath
+    classpath+=sourceSets.main.resources
+}
 
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
-    compile ('com.alibaba:dubbo:2.5.3')
-    compile ('log4j:log4j:1.2.16')
-    compile ('com.github.sgroschupf:zkclient:0.1')
+    compile('com.alibaba:dubbo:2.5.3')
+    compile('log4j:log4j:1.2.16')
+    compile('com.github.sgroschupf:zkclient:0.1')
 }

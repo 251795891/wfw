@@ -8,6 +8,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.File;
 
@@ -16,11 +17,11 @@ public class ServerTest {
     protected static Logger log = LogManager.getLogger(ServerTest.class);
 
     public static void main(String[] args) throws Exception {
+        ClassPathResource re= new ClassPathResource("config/log4j.properties");
+        PropertyConfigurator.configure(re.getURL());
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                String dir = (OSInfo.isLinux() ? "/" : "") + Class.class.getClass().getResource("/").getPath().substring(1) + "config/log4j.properties";
-                PropertyConfigurator.configure(dir);
                 ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("config/spring-dubbo-server.xml");
                 context.start();
                 log.info("启动成功");
