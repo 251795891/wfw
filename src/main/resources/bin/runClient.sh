@@ -1,1 +1,1 @@
-java -Djava.ext.dirs=./dist com.github.rpc.dubbo.services.server.ClientTest
+java -classpath './dist/*:.:' com.github.rpc.dubbo.services.server.ClientTest

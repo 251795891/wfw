@@ -19,22 +19,27 @@ public class ServerTest {
     public static void main(String[] args) throws Exception {
         ClassPathResource re= new ClassPathResource("config/log4j.properties");
         PropertyConfigurator.configure(re.getURL());
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("config/spring-dubbo-server.xml");
-                context.start();
-                log.info("启动成功");
+        try {
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("config/spring-dubbo-server.xml");
+                    context.start();
+                    log.info("启动成功");
 
-                while (true) {
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    while (true) {
+                        try {
+                            Thread.sleep(5000);
+                        } catch (InterruptedException e) {
+                            log.error(e.getMessage(),e);
+                        }
                     }
                 }
-            }
-        });
-        t.start();
+            });
+            t.start();
+        }catch (Exception ex){
+            log.error(ex.getMessage(),ex);
+
+        }
     }
 }

@@ -21,12 +21,24 @@ repositories {
     mavenCentral()
 }
 
-task copyJar(type: Copy) {
-    from 'build/libs'
-    into 'build/' + version + '/dist' // 目标位置
+
+
+task copyClasses(type: Copy) {
+    from 'build/classes/main'
+    into 'build/' + version  // 目标位置
 }
+
 task copyDependsJars(type: Copy) {
     from configurations.runtime
+    into 'build/' + version + '/dist' // 目标位置
+}
+
+task makeJar(type: Jar) {
+    from("build/classes/main")//只包含java文件
+}
+
+task copyJars(type: Copy,dependsOn:[makeJar,copyDependsJars]) {
+    from 'build/libs'
     into 'build/' + version + '/dist' // 目标位置
 }
 
@@ -34,12 +46,10 @@ task copyResources(type: Copy) {
     from 'src/main/resources/config'
     into 'build/' + version + '/config' // 目标位置
 }
-task copyBin(type: Copy, dependsOn: [copyDependsJars,copyJar , copyResources]) {
+
+task afterBuild(type: Copy,dependsOn:[build,copyJars,copyResources]){
     from 'src/main/resources/bin'
     into 'build/' + version // 目标位置
-}
-
-task afterBuild(dependsOn: [build]) {
 
 }
 
