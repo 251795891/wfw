@@ -1,1 +1,1 @@
-java -classpath './dist/*:.:' com.github.rpc.dubbo.services.server.ClientTest
+nohup java -classpath './dist/*:.:' com.github.rpc.dubbo.services.server.ClientTest &
